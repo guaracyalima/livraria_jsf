@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:composition template="_template.xhtml">
 	<ui:define name="title">Novo autor</ui:define>
@@ -12,12 +13,37 @@
 			<fieldset>
 				<legend>Dados do Autor</legend>
 				<h:panelGrid columns="2">
+					
 					<h:outputLabel value="Nome:" for="nome" />
-					<h:inputText id="nome" value="#{autorBean.autor.nome}" />
-					<h:commandButton value="Gravar" action="#{autorBean.gravar}" />
+					<h:inputText id="nome" value="#{autorBean.autor.nome}"/>
+					
+					<h:commandButton value="Gravar" action="#{autorBean.gravar}">
+						<f:ajax execute="@form" render="@form :formDoDataTableDeListagemDosAutores:dataTableDeListagemDeAutores"/>
+					</h:commandButton>
+					
 				</h:panelGrid>
 			</fieldset>
 		</h:form>
+		
+		
+		<h:form id="formDoDataTableDeListagemDosAutores">
+			<h:dataTable value="#{autorBean.autores}" var="autor" border="1" id="dataTableDeListagemDeAutores">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{autor.nome}"/>
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Ações</f:facet>
+					<h:panelGrid>
+						<h:commandButton value="Editar" action="#{autorBean.atualizaAutor(autor)}" />
+						<h:commandButton value="Deletar" action="#{autorBean.removerAutor(autor)}">
+						</h:commandButton>
+					</h:panelGrid>
+				</h:column>
+			</h:dataTable>	
+		</h:form>
+		
 	</ui:define>
 </ui:composition>
 

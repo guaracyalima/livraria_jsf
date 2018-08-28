@@ -1,5 +1,6 @@
 package br.com.caelum.livraria.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import br.com.caelum.livraria.modelo.Livro;
 
 @ManagedBean
 @ViewScoped
-public class LivroBean {
+public class LivroBean implements Serializable {
 
 	private Livro livro = new Livro();
 	private Integer autorId;
@@ -31,6 +32,10 @@ public class LivroBean {
 
 	public Livro getLivro() {
 		return livro;
+	}
+
+	public List<Livro> getLivros() {
+		return new DAO<Livro>(Livro.class).listaTodos();
 	}
 
 	public void gravarAutor() {
@@ -53,8 +58,16 @@ public class LivroBean {
 			return;
 
 		}
+		
+		if(this.livro.getId() == null){
+			new DAO<Livro>(Livro.class).adiciona(this.livro);
+			this.livro = new Livro(); 
+		} else {
+			new DAO<Livro>(Livro.class).atualiza(this.livro);
+			this.livro = new Livro(); 
+		}
 
-		new DAO<Livro>(Livro.class).adiciona(this.livro);
+		
 	}
 
 	public List<Autor> getAutores() {
@@ -75,5 +88,19 @@ public class LivroBean {
 			throw new ValidatorException(new FacesMessage(
 					"O ISBN deve começar com o numero 1"));
 		}
+	}
+
+	public void remover(Livro livro) {
+		System.out.println("Removeno livros");
+		new DAO<Livro>(Livro.class).remove(livro);
+	}
+
+	public void carregarNoFomularioDeEdicao(Livro livro) {
+		System.out.println("Carregando livro no fomrulario");
+		this.livro = livro;
+	}
+	
+	public void removeAutor(Autor autor){
+		this.livro.remove(autor);
 	}
 }

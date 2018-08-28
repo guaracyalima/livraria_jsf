@@ -64,36 +64,52 @@
 					<h:column>
 						<h:outputText value="#{autor.nome}" />
 					</h:column>
+					
+					<h:column>
+						<h:commandButton value="Exlucir autor" action="#{livroBean.removeAutor(autor)}"/>
+					</h:column>
 				</h:dataTable>
 			</fieldset>
 
 			<h:commandButton value="Gravar" action="#{livroBean.gravar}">
-				<f:ajax execute="@form" render="@form :tabelLivros" />
+				<f:ajax execute="@form"
+					render="@form :formDataTableDeExebicaoDosLivroJaCadastrados:tabelLivros" />
 			</h:commandButton>
 
 		</h:form>
 
-		<h:dataTable value="#{livrosBean.livros}" var="livro" id="tabelLivros">
+		<h:form id="formDataTableDeExebicaoDosLivroJaCadastrados">
+			<h:dataTable value="#{livroBean.livros}" var="livro" id="tabelLivros"
+				border="1">
 
-			<h:column>
-				<f:facet name="header">Titulo</f:facet>
-				<h:outputText value="#{livro.titulo}" />
-			</h:column>
+				<h:column>
+					<f:facet name="header">Titulo</f:facet>
+					<h:outputText value="#{livro.titulo}" />
+				</h:column>
 
-			<h:column>
-				<f:facet name="header">ISBN</f:facet>
-				<h:outputText value="#{livro.isbn}" />
-			</h:column>
+				<h:column>
+					<f:facet name="header">ISBN</f:facet>
+					<h:outputText value="#{livro.isbn}" />
+				</h:column>
 
-			<h:column>
-				<f:facet name="header">Preço</f:facet>
-				<h:outputText value="#{livro.preco}">
-					<f:convertNumber type="currency" pattern="R$ #0,00"
-						currencySymbol="R$" locale="pt_BR" />
-				</h:outputText>
-			</h:column>
+				<h:column>
+					<f:facet name="header">Preço</f:facet>
+					<h:outputText value="#{livro.preco}">
+						<f:convertNumber type="currency" pattern="R$ #0,00"
+							currencySymbol="R$" locale="pt_BR" />
+					</h:outputText>
+				</h:column>
 
-		</h:dataTable>
+				<h:column>
+					<f:facet name="header">Ações</f:facet>
+					<h:panelGrid>
+						<h:commandButton value="Excluir" action="#{livroBean.remover(livro)}" />
+						<h:commandButton value="Alterar" action="#{livroBean.carregarNoFomularioDeEdicao(livro)}" />
+					</h:panelGrid>
+				</h:column>
+
+			</h:dataTable>
+		</h:form>
 	</ui:define>
 </ui:composition>
 

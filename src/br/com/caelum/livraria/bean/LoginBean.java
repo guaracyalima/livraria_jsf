@@ -29,7 +29,7 @@ public class LoginBean {
 	    if (existe) {
 	    	context.getExternalContext()
 	    			.getSessionMap()
-	    			.put(null, this.usuario); //salva a seção do usuario logado 
+	    			.put("usuarioLogado", this.usuario); //salva a seção do usuario logado 
 	        return "livro?faces-redirect=true";
 	    }
 	    

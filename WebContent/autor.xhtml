@@ -10,7 +10,7 @@
 	<ui:define name="title">Novo autor</ui:define>
 
 	<ui:define name="conteudo">
-		<h:form>
+		<h:form id="formAdd">
 			<p:fieldset legend="Dados do Autor">
 				<h:panelGrid columns="2">
 					
@@ -22,8 +22,6 @@
 									action="#{autorBean.gravar}" 
 									update="@form :formDoDataTableDeListagemDosAutores:dataTableDeListagemDeAutores"
 									process="@form"/>
-						<!-- <f:ajax execute="@form" render="@form :formDoDataTableDeListagemDosAutores:dataTableDeListagemDeAutores"/>
-					</p:commandButton> -->
 					
 				</h:panelGrid>
 			</p:fieldset>
@@ -31,21 +29,29 @@
 		
 		
 		<h:form id="formDoDataTableDeListagemDosAutores">
-			<h:dataTable value="#{autorBean.autores}" var="autor" border="1" id="dataTableDeListagemDeAutores">
-				<h:column>
-					<f:facet name="header">Nome</f:facet>
+			<p:dataTable 
+						value="#{autorBean.autores}" 
+						var="autor" 
+						id="dataTableDeListagemDeAutores"
+						paginator="true">
+						 
+				<p:column headerText="Nome">
 					<h:outputText value="#{autor.nome}"/>
-				</h:column>
+				</p:column>
 				
-				<h:column>
-					<f:facet name="header">Ações</f:facet>
-					<h:panelGrid>
-						<h:commandButton value="Editar" action="#{autorBean.atualizaAutor(autor)}" />
-						<h:commandButton value="Deletar" action="#{autorBean.removerAutor(autor)}">
-						</h:commandButton>
-					</h:panelGrid>
-				</h:column>
-			</h:dataTable>	
+				<p:column headerText="Ações">
+						<p:commandButton 
+										value="Editar" 
+										action="#{autorBean.atualizaAutor(autor)}" 
+										update=":formAdd"
+										process="@form"/>
+						<p:commandButton 
+										value="Deletar" 
+										action="#{autorBean.removerAutor(autor)}"
+										process="@form"
+										update="dataTableDeListagemDeAutores"/>
+				</p:column>
+			</p:dataTable>	
 		</h:form>
 		
 	</ui:define>

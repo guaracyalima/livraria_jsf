@@ -44,5 +44,9 @@ public class AutorBean {
 		new DAO<Autor>(Autor.class).remove(autor);
 	}
 	
+	public void testeXpto(){
+		System.out.println("ta testado");
+	}
+	
 	
 }

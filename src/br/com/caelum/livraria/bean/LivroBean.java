@@ -8,9 +8,12 @@ import javax.faces.view.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.inject.Inject;
 import javax.inject.Named;
 
+import br.com.caelum.livraria.dao.AutorDao;
 import br.com.caelum.livraria.dao.DAO;
+import br.com.caelum.livraria.dao.LivroDao;
 import br.com.caelum.livraria.modelo.Autor;
 import br.com.caelum.livraria.modelo.Livro;
 
@@ -22,6 +25,13 @@ public class LivroBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@Inject
+	private LivroDao dao;
+	
+	@Inject
+	private AutorDao autorDao;
+	
 	private Livro livro = new Livro();
 	private Integer autorId;
 
@@ -38,11 +48,11 @@ public class LivroBean implements Serializable {
 	}
 
 	public List<Livro> getLivros() {
-		return new DAO<Livro>(Livro.class).listaTodos();
+		return this.dao.listaTodos();
 	}
 
 	public void gravarAutor() {
-		Autor autor = new DAO<Autor>(Autor.class).buscaPorId(autorId);
+		Autor autor = this.autorDao.buscaPorId(autorId);
 		this.livro.adicionaAutor(autor);
 	}
 
@@ -63,20 +73,20 @@ public class LivroBean implements Serializable {
 		}
 		
 		if(this.livro.getId() == null){
-			new DAO<Livro>(Livro.class).adiciona(this.livro);
+			this.dao.adiciona(this.livro);
 			this.livro = new Livro(); 
 		} else {
-			new DAO<Livro>(Livro.class).atualiza(this.livro);
+			this.dao.atualiza(this.livro);
 			this.livro = new Livro(); 
 		}
 
 		
 	}
 
-	public List<Autor> getAutores() {
-		return new DAO<Autor>(Autor.class).listaTodos();
+	/*public List<Autor> getAutores() {
+		return this.dao.listaTodos();
 	}
-
+*/
 	public List<Autor> getAutoresDoLivro() {
 
 		return this.livro.getAutores();
@@ -95,7 +105,7 @@ public class LivroBean implements Serializable {
 
 	public void remover(Livro livro) {
 		System.out.println("Removeno livros");
-		new DAO<Livro>(Livro.class).remove(livro);
+		this.dao.remove(livro);
 	}
 
 	public void carregarNoFomularioDeEdicao(Livro livro) {
